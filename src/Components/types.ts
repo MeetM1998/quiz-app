@@ -13,6 +13,7 @@ export interface Questions {
     question: Questions;
     selectedAnswerIndex: number | null;
     handleAnswerSelected: (index: number) => void;
+    selectAnswer: boolean
   }
 
   export interface FinalResultProps {

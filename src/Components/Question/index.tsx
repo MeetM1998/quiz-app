@@ -5,7 +5,15 @@ const Question: React.FC<QuestionProps> = ({
   question,
   selectedAnswerIndex,
   handleAnswerSelected,
+  selectAnswer,
 }) => {
+
+  const handleClick = (index: number) => {
+    if(!selectAnswer) {
+      handleAnswerSelected(index)
+    }
+  }
+
   return (
     <div>
       <h2 className="text-lg font-semibold mt-4">{question.question}</h2>
@@ -13,8 +21,9 @@ const Question: React.FC<QuestionProps> = ({
         {question.choices.map((answer, index) => (
           <li
             key={answer}
-            onClick={() => handleAnswerSelected(index)}
-            className={`cursor-pointer py-2 px-4 bg-white border border-gray-300 rounded-lg mb-4
+            onClick={() => handleClick(index)}
+            className={`py-2 px-4 bg-white border border-gray-300 rounded-lg mb-4
+              ${selectAnswer ? "cursor-not-allowed" : "cursor-pointer"}
               ${
                 selectedAnswerIndex === index
                   ? answer === question.correctAnswer

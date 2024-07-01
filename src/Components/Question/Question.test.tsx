@@ -16,6 +16,7 @@ test("renders question and answer choices", () => {
         question={mockQuestion}
         selectedAnswerIndex={null}
         handleAnswerSelected={() => {}}
+        selectAnswer={true}
       />
     );
   });
@@ -40,6 +41,7 @@ test("selects answer and apply correct styling", () => {
       question={mockQuestion}
       selectedAnswerIndex={selectedAnswerIndex}
       handleAnswerSelected={handleAnswerSelected}
+      selectAnswer={false}
     />
   );
 

@@ -16,6 +16,7 @@ const Quiz: React.FC = () => {
   const [questions, setQuestions] = useState<Questions[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectAnswer, setSelectAnswer] = useState<boolean>(false);
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -67,11 +68,13 @@ const Quiz: React.FC = () => {
         setShowResult(true);
       }
       setSelectedAnswerIndex(null);
+      setSelectAnswer(false);
     }
   };
 
   const handleAnswerSelected = (index: number) => {
     setSelectedAnswerIndex(index);
+    setSelectAnswer(true);
   };
 
   const resetQuiz = () => {
@@ -111,15 +114,16 @@ const Quiz: React.FC = () => {
               question={questions[activeQuestionIndex]}
               selectedAnswerIndex={selectedAnswerIndex}
               handleAnswerSelected={handleAnswerSelected}
+              selectAnswer={selectAnswer}
             />
             <div className="flex justify-end mt-4">
               <button
                 onClick={handleNextQuestion}
-                disabled={selectedAnswerIndex === null}
-                className={`text-white px-8 py-2 rounded-lg font-semibold cursor-pointer ${
+                disabled={selectedAnswerIndex === null || !selectAnswer}
+                className={`text-white px-8 py-2 rounded-lg font-semibold  ${
                   selectedAnswerIndex === null
-                    ? "bg-custom-gradient-2"
-                    : "bg-custom-gradient-3"
+                    ? "bg-custom-gradient-2 cursor-not-allowed"
+                    : "bg-custom-gradient-3 cursor-pointer"
                 }`}
               >
                 {activeQuestionIndex === questions.length - 1
