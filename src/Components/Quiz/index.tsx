@@ -9,6 +9,7 @@ const Quiz: React.FC = () => {
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(
     null
   );
+
   const [result, setResult] = useState<QuizResult>({
     correctAnswers: 0,
     wrongAnswers: 0,
@@ -16,7 +17,8 @@ const Quiz: React.FC = () => {
   const [questions, setQuestions] = useState<Questions[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectAnswer, setSelectAnswer] = useState<boolean>(false);
+  const [selectAnswer, setSelectAnswer] = useState<string | null>(null);
+  const [checkAnswer, setCheckAnswer] = useState<boolean>(false);
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -68,13 +70,14 @@ const Quiz: React.FC = () => {
         setShowResult(true);
       }
       setSelectedAnswerIndex(null);
-      setSelectAnswer(false);
+      setCheckAnswer(false);
     }
   };
 
   const handleAnswerSelected = (index: number) => {
     setSelectedAnswerIndex(index);
-    setSelectAnswer(true);
+    setSelectAnswer(questions[activeQuestionIndex].choices[index]);
+    setCheckAnswer(true);
   };
 
   const resetQuiz = () => {
@@ -91,7 +94,10 @@ const Quiz: React.FC = () => {
 
   if (loading) {
     return (
-      <div data-testid="quiz-component" className="text-center font-lg text-white font-medium">
+      <div
+        data-testid="quiz-component"
+        className="text-center font-lg text-white font-medium"
+      >
         Loading...
       </div>
     );
@@ -114,12 +120,24 @@ const Quiz: React.FC = () => {
               question={questions[activeQuestionIndex]}
               selectedAnswerIndex={selectedAnswerIndex}
               handleAnswerSelected={handleAnswerSelected}
-              selectAnswer={selectAnswer}
+              selectAnswer={checkAnswer}
             />
+            {selectedAnswerIndex !== null &&
+              selectAnswer !==
+                questions[activeQuestionIndex]?.correctAnswer && (
+                <div className="mt-4">
+                  <p className="text-lg font-semibold">
+                    Correct Answer:{" "}
+                    <span className="text-green-500">
+                      {questions[activeQuestionIndex]?.correctAnswer}
+                    </span>
+                  </p>
+                </div>
+              )}
             <div className="flex justify-end mt-4">
               <button
                 onClick={handleNextQuestion}
-                disabled={selectedAnswerIndex === null || !selectAnswer}
+                disabled={selectedAnswerIndex === null || !checkAnswer}
                 className={`text-white px-8 py-2 rounded-lg font-semibold  ${
                   selectedAnswerIndex === null
                     ? "bg-custom-gradient-2 cursor-not-allowed"
